@@ -38,6 +38,40 @@ def rules
 end
 
 def ask_question
+  if (@player1_count > @player2_count)
+    player = @player1.name
+  else
+    player = @player2.name
+  end
+
+  q = Question.new
+  puts "#{player}'s turn! Here is your question:"
+  sleep(1)
+  puts "#{player}: #{q.question}"
+  answer = gets.chomp
+  loading
+
+  if (answer.to_i != q.answer)
+    puts "#{player}: Oh no! Incorrect."
+    
+    if (@player1_count > @player2_count)
+      @player1.lives -= 1
+    else
+      @player2.lives -= 1
+    end
+  else
+    puts "#{player}: YES! You are correct."
+
+    if (@player1_count > @player2_count)
+      @player1.correct_answers += 1
+    else
+      @player2.correct_answers += 1
+    end
+  end
+  sleep(2)
+end
+
+def game_over
 
 end
 
@@ -55,7 +89,17 @@ def game
 
     puts "----- NEW TURN -----"
     ask_question
+
+    puts ""
+    puts "#{@player1.name}'s lives: #{@player1.lives} ~VS~ #{@player2.name}'s lives: #{@player2.lives}"
+    puts ""
+    sleep(2)
+    puts "#{@player1.name}'s score: #{@player1.correct_answers}/#{@player1_count} ~VS~ #{@player2.name}'s score: #{@player2.correct_answers}/#{@player2_count}"
+    puts ""
+    sleep(3)
   end
+  
+  game_over
 end
 
 def start
