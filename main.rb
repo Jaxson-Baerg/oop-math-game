@@ -1,6 +1,7 @@
 require "./classes/player"
 require "./classes/question"
 
+# Helper function to display a short loading message
 def loading
   sleep(0.2)
   print "."
@@ -11,6 +12,7 @@ def loading
   puts ""
 end
 
+# Initializer function to get player names and create global instances of the player classes
 def players
   puts "Player 1, please enter your name: "
   player1_name = gets.chomp
@@ -27,6 +29,7 @@ def players
   sleep(0.5)
 end
 
+# Helper function to display the rules messages, kept modularized for easy dev work while coding
 def rules
   loading
   puts "Each player begins with 3 lives!"
@@ -37,8 +40,9 @@ def rules
   sleep(2)
 end
 
+# Main logic function that initializes a question instance and gets the users input as well as processes the result
 def ask_question
-  if (@player1_count > @player2_count)
+  if (@player1_count > @player2_count) # Declare local variable of the current player's name
     player = @player1.name
   else
     player = @player2.name
@@ -51,7 +55,7 @@ def ask_question
   answer = gets.chomp
   loading
 
-  if (answer.to_i != q.answer)
+  if (answer.to_i != q.answer) # Process logic if the answer was incorrect
     puts "#{player}: Oh no! Incorrect."
     
     if (@player1_count > @player2_count)
@@ -59,7 +63,7 @@ def ask_question
     else
       @player2.lives -= 1
     end
-  else
+  else # Process logic if the answer was correct
     puts "#{player}: YES! You are correct."
 
     if (@player1_count > @player2_count)
@@ -71,17 +75,28 @@ def ask_question
   sleep(2)
 end
 
+# Helper function to output the results after the game is over
 def game_over
+  puts "----- GAME OVER -----"
+  sleep(1)
+  if (@player1.alive?)
+    puts "#{@player1.name} wins with a score of #{@player1.correct_answers}/#{@player1_count} and had #{@player1.lives} out of 3 lives left!"
+  else
+    puts "#{@player2.name} wins with a score of #{@player2.correct_answers}/#{@player2_count} and had #{@player2.lives} out of 3 lives left!"
+  end
 
+  sleep(4)
+  puts "Good bye!"
 end
 
+# Main logic file to keep the game loop going until a player loses all of their lives
 def game
   rules
   @player1_count = 0
   @player2_count = 0
 
   while @player1.alive? && @player2.alive?
-    if (@player1_count == @player2_count)
+    if (@player1_count == @player2_count) # Process how many questions each player has been asked
       @player1_count += 1
     else
       @player2_count += 1
@@ -102,6 +117,7 @@ def game
   game_over
 end
 
+# Game initializer function
 def start
   puts "Welcome to the Ruby OOP, Two Player, Math Game!!!"
   sleep(0.5)
